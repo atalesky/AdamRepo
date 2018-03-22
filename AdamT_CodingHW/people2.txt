@@ -1,0 +1,5 @@
+﻿Johnson | James | M | Orange | 3/6/1969
+Brown | Mary | F | Pink | 9/2/1981
+Davis | Jennifer | F | Red | 2/2/1980
+Miller | Elizabeth | F | Green | 6/22/1957
+More  |  Spaces   | F    |        Infared               |          4/7/2010
