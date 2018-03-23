@@ -98,9 +98,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\RecordsControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
-    <Compile Include="Controllers\ValuesControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -112,6 +111,10 @@
     <ProjectReference Include="..\AdamT_CodingHW.API\AdamT_CodingHW.API.csproj">
       <Project>{3F241829-0BFB-4386-B1BB-CFC5888D28FD}</Project>
       <Name>AdamT_CodingHW.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AdamT_CodingHW\AdamT_CodingHW.csproj">
+      <Project>{8E84418B-488F-487A-9EAC-7027DD413574}</Project>
+      <Name>AdamT_CodingHW</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -11,6 +11,7 @@ namespace AdamT_CodingHW.API.Controllers
 
         public RecordsController()
         {
+            // test data
             if (Persons == null || Persons.Count > 0) return;
             Persons.Add(new Person
             {
@@ -35,6 +36,30 @@ namespace AdamT_CodingHW.API.Controllers
                 Gender = "M",
                 FavoriteColor = "Black",
                 BirthDate = Convert.ToDateTime("11/19/1939")
+            });
+            Persons.Add(new Person
+            {
+                FirstName = "Axl",
+                LastName = "Rose",
+                Gender = "M",
+                FavoriteColor = "Purple",
+                BirthDate = Convert.ToDateTime("5/24/1968")
+            });
+            Persons.Add(new Person
+            {
+                FirstName = "Sue",
+                LastName = "Green",
+                Gender = "F",
+                FavoriteColor = "Orange",
+                BirthDate = Convert.ToDateTime("10/4/1988")
+            });
+            Persons.Add(new Person
+            {
+                FirstName = "Paulette",
+                LastName = "Groates",
+                Gender = "F",
+                FavoriteColor = "Gray",
+                BirthDate = Convert.ToDateTime("3/17/1978")
             });
         }
 

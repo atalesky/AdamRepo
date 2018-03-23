@@ -2,6 +2,7 @@
 
 namespace AdamT_CodingHW
 {
+    // Normally, we would put this in it's own library
     public class Person
     {
         public string FirstName { get; set; }

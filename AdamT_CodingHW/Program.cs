@@ -21,19 +21,7 @@ namespace AdamT_CodingHW
             Console.WriteLine($"You provided {args.Length} filenames, attempting to read them in...");
 
             // Loop through vars, clean and attempt to read in.
-            foreach (var argument in args)
-            {
-                var cleanedArg = argument.Trim();
-                if (!string.IsNullOrEmpty(cleanedArg))
-                {
-                    readInLines.AddRange(ReadInFile(cleanedArg, string.Empty));
-                }
-                else
-                {
-                    Console.WriteLine(Environment.NewLine + "Unable to read file, exiting...");
-                    return;
-                }
-            }
+            ActOnEachVariable(args, ref readInLines);
 
             // Attempt to Parse Lines
             List<Person> parsedPersons = ParseLines(readInLines);
@@ -62,6 +50,23 @@ namespace AdamT_CodingHW
 
             Console.WriteLine(Environment.NewLine + "Application finished, press any key to exit...");
             Console.ReadKey();
+        }
+
+        public static void ActOnEachVariable(string[] args, ref List<string> readInLines)
+        {
+            foreach (var argument in args)
+            {
+                var cleanedArg = argument.Trim();
+                if (!string.IsNullOrEmpty(cleanedArg))
+                {
+                    readInLines.AddRange(ReadInFile(cleanedArg, string.Empty));
+                }
+                else
+                {
+                    Console.WriteLine(Environment.NewLine + "Unable to read file, exiting...");
+                    return;
+                }
+            }
         }
 
         public static List<string> ReadInFile(string filename, string overridepath)
