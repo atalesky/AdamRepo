@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 
 namespace AdamT_CodingHW
@@ -8,48 +9,38 @@ namespace AdamT_CodingHW
     public class Program
     {
         public static void Main(string[] args)
-        {  
-            List<string> readInLines = new List<string>(); //we use a list vs an array so we dont have to keep resizing and slowing our app
-
-            // Ensure we have args
-            if (args == null || args.Length == 0)
+        {
+            try
             {
-                Console.WriteLine("You must supply at least one filename to parse.");
-                return;
+                List<string>
+                    readInLines =
+                        new List<string>(); //we use a list vs an array so we dont have to keep resizing and slowing our app
+
+                // Ensure we have args
+                if (args == null || args.Length == 0)
+                {
+                    Console.WriteLine("You must supply at least one filename to parse.");
+                    return;
+                }
+
+                Console.WriteLine($"You provided {args.Length} filenames, attempting to read them in...");
+
+                // Loop through vars, clean and attempt to read in.
+                ActOnEachVariable(args, ref readInLines);
+
+                // Attempt to Parse Lines
+                List<Person> parsedPersons = ParseLines(readInLines);
+
+                // Do our sorts and printing
+                SortAndPrint(parsedPersons);
+
+                Console.WriteLine(Environment.NewLine + "Application finished, press any key to exit...");
+                Console.ReadKey();
             }
-
-            Console.WriteLine($"You provided {args.Length} filenames, attempting to read them in...");
-
-            // Loop through vars, clean and attempt to read in.
-            ActOnEachVariable(args, ref readInLines);
-
-            // Attempt to Parse Lines
-            List<Person> parsedPersons = ParseLines(readInLines);
-
-            // Sort by gender then last name ascending
-            parsedPersons.Sort(delegate (Person a, Person b)
+            catch (Exception ex)
             {
-                var xdiff = string.Compare(a.Gender, b.Gender, StringComparison.Ordinal);
-                return xdiff != 0 ? xdiff : string.Compare(a.LastName, b.LastName, StringComparison.Ordinal);
-            });
-
-            // Print Results
-            PrintResults(parsedPersons, "sort by gender then last name ascending");
-
-            // Sort by birth date, ascending -- use simpler sort for one field
-            parsedPersons.Sort((x, y) => DateTime.Compare(x.BirthDate, y.BirthDate));
-
-            // Print Results
-            PrintResults(parsedPersons, "sort by birth date ascending.");
-
-            // Sort by last name, descending
-            parsedPersons.Sort((x, y) => string.Compare(y.LastName, x.LastName, StringComparison.Ordinal));
-
-            // Print Results
-            PrintResults(parsedPersons, "sort by last name descending.");
-
-            Console.WriteLine(Environment.NewLine + "Application finished, press any key to exit...");
-            Console.ReadKey();
+                Console.WriteLine($"Error running the program: {ex.Message}");
+            }
         }
 
         public static void ActOnEachVariable(string[] args, ref List<string> readInLines)
@@ -76,10 +67,12 @@ namespace AdamT_CodingHW
                 ? Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + "\\" + filename
                 : overridepath;
 
-            var lines = new List<string>();
+            List<string> lines;
 
             try
             {
+                lines = new List<string>();
+
                 var reader = new StreamReader(fileLocation);
 
                 string line;
@@ -168,6 +161,31 @@ namespace AdamT_CodingHW
                 return null;
             }
             return retValue;
+        }
+
+        public static void SortAndPrint(List<Person> parsedPersons)
+        {
+            // Sort by gender then last name ascending
+            parsedPersons.Sort(delegate (Person a, Person b)
+            {
+                var xdiff = string.Compare(a.Gender, b.Gender, StringComparison.Ordinal);
+                return xdiff != 0 ? xdiff : string.Compare(a.LastName, b.LastName, StringComparison.Ordinal);
+            });
+
+            // Print Results
+            PrintResults(parsedPersons, "sort by gender then last name ascending");
+
+            // Sort by birth date, ascending -- use simpler sort for one field
+            parsedPersons.Sort((x, y) => DateTime.Compare(x.BirthDate, y.BirthDate));
+
+            // Print Results
+            PrintResults(parsedPersons, "sort by birth date ascending.");
+
+            // Sort by last name, descending
+            parsedPersons.Sort((x, y) => string.Compare(y.LastName, x.LastName, StringComparison.Ordinal));
+
+            // Print Results
+            PrintResults(parsedPersons, "sort by last name descending.");
         }
 
         public static void PrintResults(List<Person> results, string label)

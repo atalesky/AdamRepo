@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace AdamT_CodingHW.API.Controllers
 {
     public class RecordsController : ApiController
     {
+        //  I have not implemented logging or authentication/authorization
+
         private static readonly List<Person> Persons = new List<Person>();
+        private static int _nextId = 7;
 
         public RecordsController()
         {
             // test data
             if (Persons == null || Persons.Count > 0) return;
+
             Persons.Add(new Person
             {
+                Id = 1,
                 FirstName = "Adam",
                 LastName = "Taylor",
                 Gender = "M",
@@ -23,6 +30,7 @@ namespace AdamT_CodingHW.API.Controllers
             });
             Persons.Add(new Person
             {
+                Id = 2,
                 FirstName = "Mary",
                 LastName = "Green",
                 Gender = "F",
@@ -31,6 +39,7 @@ namespace AdamT_CodingHW.API.Controllers
             });
             Persons.Add(new Person
             {
+                Id = 3,
                 FirstName = "Warren",
                 LastName = "Bates",
                 Gender = "M",
@@ -39,6 +48,7 @@ namespace AdamT_CodingHW.API.Controllers
             });
             Persons.Add(new Person
             {
+                Id = 4,
                 FirstName = "Axl",
                 LastName = "Rose",
                 Gender = "M",
@@ -47,6 +57,7 @@ namespace AdamT_CodingHW.API.Controllers
             });
             Persons.Add(new Person
             {
+                Id = 5,
                 FirstName = "Sue",
                 LastName = "Green",
                 Gender = "F",
@@ -55,6 +66,7 @@ namespace AdamT_CodingHW.API.Controllers
             });
             Persons.Add(new Person
             {
+                Id = 6,
                 FirstName = "Paulette",
                 LastName = "Groates",
                 Gender = "F",
@@ -65,30 +77,47 @@ namespace AdamT_CodingHW.API.Controllers
 
 
         // GET: /Records/gender
-        [Route("Records/gender")]
+        [System.Web.Http.Route("Records/gender")]
         public List<Person> GetByGender()
         {
             return Persons.OrderBy(r => r.Gender).ToList();
         }
 
         // GET: /Records/birthdate
-        [Route("Records/birthdate")]
+        [System.Web.Http.Route("Records/birthdate")]
         public List<Person> GetByBirthdate()
         {
             return Persons.OrderBy(r => r.BirthDate).ToList();
         }
 
         // GET: /Records/name
-        [Route("Records/name")]
+        [System.Web.Http.Route("Records/name")]
         public List<Person> GetByName()
         {
             return Persons.OrderBy(r => r.LastName).ToList();
         }
 
         // POST: /Records
-        public void Post(Person value)
+        public HttpResponseMessage Post(Person value)
         {
-            Persons.Add(value);
+            try
+            {               
+                if (string.IsNullOrEmpty(value.FirstName) || string.IsNullOrEmpty(value.LastName) || string.IsNullOrEmpty(value.FavoriteColor) 
+                    || string.IsNullOrEmpty(value.Gender) || (value.Gender.ToLower() != "m" || (value.Gender.ToLower() != "f")))
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest);
+                }
+
+                Persons.Add(value);
+                _nextId++;  //simulate identiy column
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+
+                //todo: logging
+            }          
         }
     }
 }
